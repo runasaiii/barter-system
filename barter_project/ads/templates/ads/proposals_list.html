@@ -1,0 +1,22 @@
+<h1>Предложения по обмену для ваших объявлений</h1>
+
+{% for proposal in proposals %}
+  <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+    <p><strong>От:</strong> {{ proposal.ad_sender.user.username }}</p>
+    <p><strong>Объявление отправителя:</strong> {{ proposal.ad_sender.title }}</p>
+    <p><strong>Ваше объявление:</strong> {{ proposal.ad_receiver.title }}</p>
+    <p><strong>Комментарий:</strong> {{ proposal.comment }}</p>
+    <p><strong>Статус:</strong> {{ proposal.get_status_display }}</p>
+    <p><strong>Дата:</strong> {{ proposal.created_at }}</p>
+
+    {% if proposal.status == 'pending' %}
+    <form method="post" action="{% url 'handle_proposal' proposal.id %}">
+      {% csrf_token %}
+      <button type="submit" name="action" value="accept">Одобрить</button>
+      <button type="submit" name="action" value="decline">Отклонить</button>
+    </form>
+    {% endif %}
+  </div>
+{% empty %}
+  <p>Нет новых предложений.</p>
+{% endfor %}

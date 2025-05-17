@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="form-container">
+    <h2>Объявление создано!</h2>
+    <p><strong>Название:</strong> {{ ad.title }}</p>
+    <p><strong>Описание:</strong> {{ ad.description }}</p>
+    {% if ad.image %}
+      <p><strong>Изображение:</strong><br>
+      <img src="{{ ad.image.url }}" alt="Фото" style="max-width: 300px; border-radius: 10px;"></p>
+    {% endif %}
+    <p><strong>Дата:</strong> {{ ad.created_at }}</p>
+    <a href="{% url 'ad_detail' pk=ad.id %}">Перейти к объявлению</a>
+  </div>
+{% endblock %}

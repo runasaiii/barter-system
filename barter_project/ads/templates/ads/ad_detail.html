@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ ad.title }}</h2>
+  {% if ad.image %}
+    <img src="{{ ad.image.url }}" alt="Изображение объявления">
+  {% endif %}
+  <p>{{ ad.description }}</p>
+  <p><strong>Категория:</strong> {{ ad.category }}</p>
+  <p><strong>Состояние:</strong> {{ ad.get_condition_display }}</p>
+  <p><strong>Автор:</strong> {{ ad.user.username }}</p>
+
+  {% if is_author %}
+    <a href="{% url 'edit_ad' pk=ad.id %}">Редактировать</a> |
+    <a href="{% url 'delete_ad' pk=ad.id %}">Удалить</a>
+  {% endif %}
+
+  {% if user.is_authenticated and ad.user != user %}
+    <a href="{% url 'create_proposal' ad.id %}">💬 Предложить обмен</a>
+  {% endif %}
+{% endblock %}
