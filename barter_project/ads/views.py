@@ -6,6 +6,8 @@ from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 @login_required
 def create_ad(request):
@@ -124,3 +126,19 @@ def handle_proposal(request, proposal_id):
         proposal.status = 'declined'
     proposal.save()
     return redirect('proposals_for_user')
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')  # или на главную
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
